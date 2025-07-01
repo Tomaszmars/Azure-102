@@ -106,3 +106,8 @@ Here is the updated table:
 13. **Deployment Slots per App:** This count includes the production slot.
 
 This enhanced table provides a more detailed comparison of the Azure Functions hosting plans, covering aspects like cold start behavior, various storage limits, and specific advanced features like GPU support and compute isolation, all supported by the provided sources.
+
+
+
+**LINK do NoteBookLM**
+https://notebooklm.google.com/notebook/20ff274f-d71a-4eb7-8411-0ab787e45118?authuser=1
