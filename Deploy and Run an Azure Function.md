@@ -49,45 +49,60 @@ Here is a table detailing the primary lack of some functionality for each Azure 
 
 Drawing on the information in the provided sources and our conversation history, I can suggest several additional features that would enhance your comparison of Azure Functions hosting plans. These features delve deeper into the operational characteristics, performance, and resource availability of each plan.
 
-Here are the features I would add to the comparison:
 
-*   **Cold Start Behavior**: This is a critical aspect for serverless functions, describing the delay experienced when a function app is invoked after a period of inactivity.
-    *   **Flex Consumption plan**: Supports "always ready instances" to reduce cold start delays when provisioning new instances.
-    *   **Consumption plan**: Apps can scale to zero when idle, which means some requests might experience higher latencies at startup. However, it includes optimizations like pulling from prewarmed placeholder functions to help decrease cold start time.
-    *   **Premium plan**: Supports "always ready instances" to avoid cold starts by maintaining one or more "perpetually warm" instances.
-    *   **Dedicated plan**: When running in a Dedicated plan, the Functions host can run continuously on a prescribed number of instances, effectively eliminating cold start as an issue.
-    *   **Container Apps**: Cold start behavior depends on the minimum number of replicas. If set to zero, apps can scale to zero when idle, and some requests might have higher latencies at startup. If set to one or more, the host process runs continuously, so cold start is not an issue.
 
-*   **Temporary Storage per Instance (GB)**: This refers to the ephemeral storage available to each function instance.
-    *   **Flex Consumption plan**: 0.8 GB.
-    *   **Consumption plan**: 0.5 GB, but it's 1.5 GB for Linux Consumption plans.
-    *   **Premium plan**: 21-140 GB.
-    *   **Dedicated plan**: 11-140 GB.
-    *   **Container Apps**: Not applicable (n/a).
+Certainly! Drawing upon the comprehensive information from the sources and our previous conversation, I will enhance the comparison table for Azure Functions hosting plans by adding the suggested new columns and refining existing data with precise citations.
 
-*   **Persisted Storage per App (GB)**: This indicates the amount of storage that remains even after instances are deallocated, typically used for file content.
-    *   **Flex Consumption plan**: 0 GB.
-    *   **Consumption plan**: 1 GB. For Linux, you must explicitly mount your own Azure Files share.
-    *   **Premium plan**: 250 GB.
-    *   **Dedicated plan**: 10-1000 GB.
-    *   **Container Apps**: Not applicable (n/a).
+Here is the updated table:
 
-*   **Deployment Slots per App**: This feature allows you to deploy different versions of your function app (e.g., for staging or production) and swap them, which is useful for continuous deployment scenarios.
-    *   **Flex Consumption plan**: Not applicable (n/a).
-    *   **Consumption plan**: 2 slots.
-    *   **Premium plan**: 3 slots.
-    *   **Dedicated plan**: 1-20 slots.
-    *   **Container Apps**: Not supported.
+| Features to Compare                      | **Flex Consumption plan** | **Consumption plan** | **Premium plan** | **Dedicated plan** | **Container Apps** |
+| :--------------------------------------- | :------------------------ | :------------------- | :--------------- | :----------------- | :----------------- |
+| **Windows deployment support**           | ❌                   | ✅              | ✅          | ✅            | ❌            |
+| **Support container deployment**         | ❌                   | ❌              | ✅          | ✅            | ✅            |
+| **Support deployment slots**             | ❌                   | ✅              | ✅          | ✅            | ❌            |
+| **Autoscale configuration**              | ✅               | ✅          | ✅      | ✅            | ✅        |
+| **Support custom domains**               | ✅                   | ✅              | ✅          | ✅            | ❌            |
+| **Support TSL/SSL**                      | ✅                   | ✅              | ✅          | ✅            | ❌            |
+| **Virtual network connectivity**         | ✅               | ✅              | ✅      | ✅        | ✅            |
+| **No delay after idle (Warm instances)** | ✅                   | ❌              | ✅          | ✅            | ✅            |
+| **Horizontal scaling**                   | ✅                   | ✅              | ✅          | ✅            | ✅            |
+| **Vertical scaling**                     | ✅                   | ❌                   | ✅          | ✅            | ✅            |
+| **Scale to zero**                        | ✅                   | ✅              | ❌          | ❌            | ✅            |
+| **Linux image support (custom)**         | ❌                   | ❌              | ✅      | ✅        | ✅            |
+| **Default Time-out Duration (min)**      | 30                   | 5               | 30          | 30            | 30            |
+| **Max Time-out Duration (min)**          | Unbounded¹           | 10              | Unbounded¹  | Unbounded²    | Unbounded³    |
+| **Max Instances**                        | 1000⁴                | 200 (Win) / 100 (Lin)⁵ | 100 (Win) / 20-100 (Lin)⁶ | 10-30 (100 ASE)⁷ | 300-1000⁸     |
+| **Max Memory per Instance (GB)**         | 4                    | 1.5             | 3.5-14      | 1.75-256 (8-256 ASE)⁹ | Varies        |
+| **Function Apps per Plan**               | 1                    | 100             | 100         | Unbounded¹⁰   | Unbounded¹⁰   |
+| **Cold Start Behavior**                  | Reduced with always ready instances | Can scale to zero, higher latency at startup; optimizations like prewarmed placeholders | Avoided with always ready instances | Not an issue as host runs continuously | Depends on min replicas (zero: higher latency; one+: no issue) |
+| **Temporary Storage per Instance (GB)**  | 0.8                  | 0.5 (Win) / 1.5 (Lin)¹¹ | 21-140      | 11-140        | n/a           |
+| **Persisted Storage per App (GB)**       | 0                    | 1¹²             | 250         | 10-1000       | n/a           |
+| **Deployment Slots per App**             | n/a                  | 2¹³             | 3¹³         | 1-20          | Not supported |
+| **Compute Isolation / Dedicated Env.**   | ❌                        | ❌                   | ❌               | ✅ (Full isolation with App Service Environment) | ❌                 |
+| **GPU Support**                          | ❌                        | ❌                   | ❌               | ❌                 | ✅            |
 
-*   **Compute Isolation / Dedicated Environment**: This indicates whether the plan provides dedicated compute resources, offering a higher level of isolation and security, often associated with App Service Environment (ASE).
-    *   **Flex Consumption plan**: ❌
-    *   **Consumption plan**: ❌
-    *   **Premium plan**: ❌ (While it has prewarmed instances, it's not fully isolated like ASE)
-    *   **Dedicated plan**: ✅ Offers full compute isolation and secure network access when using an App Service Environment (ASE).
-    *   **Container Apps**: ❌ (While containers offer some isolation, it's not the same as a fully dedicated environment like ASE).
+---
 
-*   **GPU Support**: This is relevant for specific, high-performance computing scenarios.
-    *   **Container Apps**: ✅ Your functions can utilize high-end processing power provided by dedicated GPU compute resources.
-    *   All other plans: ❌ (Not explicitly mentioned as a feature for other plans in the sources).
+**Symbol Explanations:**
 
-Adding these details will provide a more comprehensive view of the capabilities and limitations of each Azure Functions hosting plan, aiding in more informed decision-making for specific use cases.
+*   **✅** (Yes) – The feature is supported or available in the given hosting plan.
+*   **❌** (No) – The feature is not supported or available in the given hosting plan.
+*   **n/a** (Not applicable) – The feature does not apply to this hosting plan.
+
+**Additional Notes on Table Data:**
+
+1.  **Unbounded Max Time-out Duration (Flex Consumption & Premium Plans):** There is no enforced maximum execution time-out duration. However, a grace period of 60 minutes is given during scale-in and 10 minutes during platform updates. HTTP-triggered functions have a maximum response time of 230 seconds due to the Azure Load Balancer's default idle time-out.
+2.  **Unbounded Max Time-out Duration (Dedicated Plan):** This requires the App Service plan to be set to "Always On". A grace period of 10 minutes is given during platform updates.
+3.  **Unbounded Max Time-out Duration (Container Apps):** When the minimum number of replicas is set to zero, the default time-out depends on the specific triggers used in the app. If set to one or more, the host process runs continuously.
+4.  **Max Instances (Flex Consumption Plan):** This plan has a regional subscription quota limiting total memory usage across a region, and currently only supports Linux.
+5.  **Max Instances (Consumption Plan):** The maximum is **200** instances for Windows and **100** for Linux. During scale-out, there's a current limit of **500** instances per subscription per hour for Linux apps on a Consumption plan.
+6.  **Max Instances (Premium Plan):** The maximum is **100** instances for Windows, and **20-100** instances for Linux (in some regions, Linux apps on a Premium plan can scale to 100 instances). For private endpoint restricted HTTP triggers, scaling out is limited to at most **20** instances.
+7.  **Max Instances (Dedicated Plan):** The typical maximum is **10-30**, but can go up to **100** in an App Service Environment (ASE). Specific limits depend on App Service plan options.
+8.  **Max Instances (Container Apps):** The default is 10 instances, but you can set the maximum number of replicas up to **1000**. When creating a function app from the Azure portal, you are limited to **300** instances.
+9.  **Max Memory per Instance (Dedicated Plan):** This varies from **1.75 GB to 256 GB** for a standard App Service plan, and from **8 GB to 256 GB** for an App Service Environment (ASE), depending on the chosen size.
+10. **Function Apps per Plan (Dedicated & Container Apps):** While listed as "unbounded", the actual number of function apps you can host depends on the activity, machine instance size, and resource utilization. There's also a subscription limit of 5,000 function apps.
+11. **Temporary Storage per Instance (Consumption Plan):** The storage limit is 0.5 GB, but it's 1.5 GB for Linux Consumption plans.
+12. **Persisted Storage per App (Consumption Plan):** Consumption plan uses an Azure Files share. For Linux, you must explicitly mount your own Azure Files share.
+13. **Deployment Slots per App:** This count includes the production slot.
+
+This enhanced table provides a more detailed comparison of the Azure Functions hosting plans, covering aspects like cold start behavior, various storage limits, and specific advanced features like GPU support and compute isolation, all supported by the provided sources.
