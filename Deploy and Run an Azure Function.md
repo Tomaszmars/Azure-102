@@ -339,6 +339,8 @@ At the top of the window from the drop-down, choose your function app.
 Click Deploy.
 
 Wait at least five minutes for the code to deploy to the function app.
+![image](https://github.com/user-attachments/assets/bb6f7e1d-5823-4f88-a4f3-b9e920d53690)
+
 
 Go back to the Azure portal, and on the left expand Functions.
 
