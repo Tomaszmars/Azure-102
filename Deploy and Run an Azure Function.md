@@ -3,7 +3,7 @@ Deploy an Azure Function
 
     1. Create Function App
     2. Select a hosting option
-
+![alt text](image-5.png)
 ![alt text](image.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
@@ -189,3 +189,179 @@ By carefully weighing these factors against your application's requirements, you
 
 **LINK do NoteBookLM**
 https://notebooklm.google.com/notebook/20ff274f-d71a-4eb7-8411-0ab787e45118?authuser=1
+
+
+
+
+-------------------------------------------------------
+# Deploy an Azure Function
+    Click the Resource Group drop-down and pick your resource group.
+    Give your function app a unique Function App name.
+    Click on the Runtime stack drop-down.
+    Choose Python.
+
+    ![alt text](image-6.png)
+
+    Click on the Region drop-down and set it to the same region as your resource group.
+    Click on the Pricing plan drop-down.
+    Select the Basic B1 pricing plan.
+    If you don't see the Basic B1 plan, click Explore pricing plans and select it.
+    Click Review + create.
+    Click Create. It will take about one to two minutes to deploy.
+    Click Go to resource.
+
+
+
+
+
+
+
+
+    # Create a Sample Application
+    
+In your Visual Studio Code (VSCode), in the left-hand navigation bar, click Extensions.
+
+In the search box, search for function.
+
+Click Install on the Azure Functions extension.
+
+In the left-hand navigation bar, click the Azure extension.
+
+Under Workspace, click on Create Function Project....
+
+Click New Folder and name it function.
+
+This and the next step especially, and others maybe too, may differ slightly depending on your operating system. Adjust accordingly.
+Click the function folder and click Select.
+
+At the top of the VSCode window, select Python.
+
+Then select Model V2.
+
+Choose Skip virtual environment.
+
+Choose HTTP trigger for the template.
+
+Press Enter to confirm the default name of the function, http_trigger.
+
+Select ANONYMOUS for authorization level.
+
+Select Open in current window.
+
+If prompted, click Yes, I trust the authors.
+
+In the left-hand explorer view, click function_app.py to view the code you are about to execute.
+
+In the left-hand navigation bar, click the Azure extension.
+
+Under RESOURCES, click on Sign in to Azure....
+
+Click Allow when asked to sign in to Microsoft.
+
+You will now be prompted in your browser to sign in.
+
+From your lab Credentials, copy the Username, and paste it in the Sign in field.
+
+You may be prompted to Pick an account, in which case first click Use another account.
+Click Next.
+
+From your lab Credentials, copy the Password, and paste it in the Enter Temporary Access Pass field.
+
+Click Sign in.
+
+If you get an Automatically sign in to all desktop apps and websites on this device pop-up, click No, this app only.
+
+Under RESOURCES, expand your Lab Subscription.
+
+It'll be the only option, and its name will likely contain Real Hands-On Labs.
+
+Click to expand Function App.
+
+Right-click your function app, and click Deploy to Function App....
+
+There'll be only one function app, the one you named earlier.
+
+Click Deploy.
+
+Wait at least five minutes for the code to deploy to the function app.
+
+You will likely see a Succeeded message, but still wait the five minutes.
+Expand your function app. You will see options, including Functions.
+
+Right-click your function app and click Refresh. Expand Functions. You should see the http_trigger function under.
+
+Note: If you do not see the http_trigger function, follow the steps below:
+
+Right-click your function app and again click Deploy to Function App....
+Click Deploy.
+Wait at least 10 minutes for the code to deploy.
+If you notice http_trigger show up, though, you can quit waiting and move on.
+Right-click your function app and click Refresh.
+Right-click http_trigger and click Copy Function URL.
+
+In a new browser tab, paste in the copied Function URL, and then press Enter to navigate to it.
+
+You'll see a This HTTP triggered function ... message.
+
+At the end of the url in the address bar, add ?name=YourName.
+
+Press Enter and observe the function has returned your name.
+
+
+
+# Deploy Web Scraping Code to the Azure Function
+At the GitHub repo. window, click function_app.py.
+
+Click Copy raw file.
+
+In VSCode in the upper-left, click Explorer, then double-click function_app.py to open it.
+
+Highlight all code in the function_app.py file, and paste in the copied code.
+
+Save the file using File > Save or Control+S (or Command+S).
+
+On the left, double-click requirements.txt.
+
+In GitHub, navigate back on page.
+
+Click requirements.txt.
+
+Click Copy raw file.
+
+In VSCode, highlight all the contents in the requirements.txt file and paste in the copied code.
+
+Save the file using File > Save or Control+S.
+
+Right-click on the blank space in the Explorer pane on the left, and click Deploy to Function App....
+
+At the top of the window from the drop-down, choose your function app.
+
+Click Deploy.
+
+Wait at least five minutes for the code to deploy to the function app.
+
+Go back to the Azure portal, and on the left expand Functions.
+
+Click App files.
+
+Click Refresh.
+
+Click the drop-down on host.json.
+
+Choose function_app.py.
+
+Observe the new web scraping code.
+
+Open the Function window, and remove the ?name=YourName parameter at the end of the URL.
+
+Press Enter to make a new request.
+
+Observe the dataset returned from function, which will start with First dataset.
+
+Back in the Azure portal, and copy the URL from line 14.
+
+In a new browser tab, navigate to the copied URL.
+
+Click the first dataset on this page.
+
+The URL of this dataset will match the URL returned from the function app.
