@@ -269,17 +269,6 @@ From your lab Credentials, copy the Password, and paste it in the Enter Temporar
 
 Click Sign in.
 
-
-When Issue"
-```
-    az account clear
-    az config set core.enable_broker_on_windows=false
-    az login
-```
-or use add account
-
-![alt text](image-7.png)
-
 If you get an Automatically sign in to all desktop apps and websites on this device pop-up, click No, this app only.
 
 Under RESOURCES, expand your Lab Subscription.
@@ -294,6 +283,10 @@ There'll be only one function app, the one you named earlier.
 
 Click Deploy.
 
+![image](https://github.com/user-attachments/assets/bb6f7e1d-5823-4f88-a4f3-b9e920d53690)
+![image](https://github.com/user-attachments/assets/763c5f56-cd17-4d76-9c57-9192a1913f72)
+![image](https://github.com/user-attachments/assets/17b79cda-0224-41f0-8464-389bbaf5d80a)
+![image](https://github.com/user-attachments/assets/f88b573e-a52a-4147-a041-eb188947556e)
 Wait at least five minutes for the code to deploy to the function app.
 
 You will likely see a Succeeded message, but still wait the five minutes.
@@ -318,16 +311,74 @@ At the end of the url in the address bar, add ?name=YourName.
 
 Press Enter and observe the function has returned your name.
 
+import azure.functions as func
+import logging
 
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+
+@app.route(route="http_trigger")
+def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+
+    name = req.params.get('name')
+    if not name:
+        try:
+            req_body = req.get_json()
+        except ValueError:
+            pass
+        else:
+            name = req_body.get('name')
+
+    if name:
+        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+    else:
+        return func.HttpResponse(
+             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
+             status_code=200
+        )
 
 # Deploy Web Scraping Code to the Azure Function
 At the GitHub repo. window, click function_app.py.
+
+https://github.com/pluralsight-cloud/LAB-Deploy-and-Run-an-Azure-Function
 
 Click Copy raw file.
 
 In VSCode in the upper-left, click Explorer, then double-click function_app.py to open it.
 
 Highlight all code in the function_app.py file, and paste in the copied code.
+
+import logging
+import azure.functions as func
+import requests
+import re
+
+# Define the Azure Function App
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+
+@app.route(route="http_trigger")
+def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info("Python HTTP trigger function processed a request.")
+
+    # URL of the data catalog page
+    url = "https://catalog.data.gov/dataset?q=&sort=metadata_created+desc"
+
+    try:
+        # Fetch the page content
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        
+        # Update regex pattern to correctly extract dataset links
+        match = re.search(r'<h3[^>]*class="dataset-heading"[^>]*>\s*<a\s+href="([^"]+)"', response.text, re.IGNORECASE)
+
+        if match:
+            full_link = "https://catalog.data.gov" + match.group(1)
+            return func.HttpResponse(f"First dataset link: {full_link}", status_code=200)
+        else:
+            return func.HttpResponse("No dataset links found on the page.", status_code=404)
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error fetching URL: {e}")
+        return func.HttpResponse(f"Failed to fetch the URL: {str(e)}", status_code=500)
 
 Save the file using File > Save or Control+S (or Command+S).
 
@@ -339,17 +390,26 @@ Click requirements.txt.
 
 Click Copy raw file.
 
+
+azure-functions
+requests
+
 In VSCode, highlight all the contents in the requirements.txt file and paste in the copied code.
 
 Save the file using File > Save or Control+S.
 
 Right-click on the blank space in the Explorer pane on the left, and click Deploy to Function App....
+![image](https://github.com/user-attachments/assets/277582fa-b648-4ee1-ae66-92e3b37b85f2)
+![image](https://github.com/user-attachments/assets/b32e2786-8a74-4907-af7b-afb4e2561f6e)
+
 
 At the top of the window from the drop-down, choose your function app.
 
 Click Deploy.
 
 Wait at least five minutes for the code to deploy to the function app.
+![image](https://github.com/user-attachments/assets/6a26df7c-0ac8-4c09-b5cd-8d21b056a320)
+
 
 Go back to the Azure portal, and on the left expand Functions.
 
