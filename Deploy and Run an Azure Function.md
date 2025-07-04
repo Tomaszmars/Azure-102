@@ -269,6 +269,17 @@ From your lab Credentials, copy the Password, and paste it in the Enter Temporar
 
 Click Sign in.
 
+
+When Issue"
+```
+    az account clear
+    az config set core.enable_broker_on_windows=false
+    az login
+```
+or use add account
+
+![alt text](image-7.png)
+
 If you get an Automatically sign in to all desktop apps and websites on this device pop-up, click No, this app only.
 
 Under RESOURCES, expand your Lab Subscription.
