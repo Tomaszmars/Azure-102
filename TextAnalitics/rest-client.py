@@ -5,6 +5,7 @@ from urllib import request, parse, error
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 from azure.core.credentials import AzureKeyCredential
+import httplib2
 
 def main():
     global ai_endpoint
@@ -32,8 +33,7 @@ def main():
     except Exception as ex:
         print(ex)
 
-   
-    
+
 
 def GetLanguage(text):
     try:
@@ -64,6 +64,16 @@ def GetLanguage(text):
         # Send the request
         response = conn.getresponse()
         data = response.read().decode("UTF-8")
+        
+        # TEST
+        httplib2.debuglevel = 1
+        h = httplib2.Http()
+        resp, content = h.request(
+            f"{ai_endpoint}/text/analytics/v3.1/languages",
+            "POST", 
+            body=json.dumps(jsonBody),
+            headers=headers
+        )
 
         # If the call was successful, get the response
         if response.status == 200:
